@@ -5,7 +5,9 @@ import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
 
 const AWS = require('aws-sdk')
 
-
+AWS.config.update({
+  region: "eu-west-1"
+});
 const Polly =  new AWS.Polly({
   region: 'eu-west-1'
 })
