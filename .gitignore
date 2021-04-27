@@ -42,4 +42,4 @@ amplifytools.xcconfig
 .secret-*
 
 #sdk
-aws-credentials.js
+#aws-credentials.js
