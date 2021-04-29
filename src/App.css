@@ -38,14 +38,16 @@
 }
 
 input.write {
+  top: 20px;
   color: rgba(0,0,0,0.4);
 }
 div.text_container {
-  position: relative;
-  text-align: center;
-  width: 80%;
-  margin: auto;
-  
+	position: relative;
+	text-align: center;
+	width: 80%;
+	margin-left: auto;
+	margin-top: 0px;
+	margin-right: auto;
 }
 div.write {
   position: absolute;
@@ -82,9 +84,15 @@ div.write {
   cursor: pointer;
 }
 
+.sliders {
+  padding-top: 40px;
+  width: 80%;
+  margin: auto;
+}
+
 button.buttons {
   width: 80%;
-  margin: 20px 0px 20px 0px;
+  margin: 20px 0px 0px 0px;
   padding: 0;
   height: 40px;
   border: 1px solid #7e99cf;
@@ -99,10 +107,50 @@ button.buttons {
   background-color: #677fae;
 }
 
+button.buttonsPlayAndNext {
+	width: 40%;
+	display: table-cell;
+	padding: 7px;
+	height: 40px;
+	border: 1px solid #7e99cf;
+	font-size: 18px;
+	font-family: var(--amplify-font-family);
+	text-align: center;
+	white-space: nowrap;
+	cursor: pointer;
+	color: #FFF;
+	letter-spacing: 0.75px;
+	text-transform: var(--text-transform);
+	background-color: #677fae;
+	box-sizing: border-box;
+	margin-left: 10px;
+}
+.buttonsPlayAndNext {
+	width: 80%;
+	margin: auto;
+	display: table;
+	padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+
+.title_text p {
+	font-size: 12px;
+	text-align: left;
+}
+
+
+.divTitle_text {
+  margin-top: 24px;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
 .table_words {
 	max-width: 80%;
 	margin: auto;
 	border: 1px solid #b3b2b2;
+  font-size: 14px;
 }
 
 .tittle_table_words {
@@ -130,7 +178,8 @@ button.buttons {
 
 .results_table_words > div > div{
   display: table-cell;
-  width: 20%;
+  box-sizing: border-box;
+  width: 15%;
   height: 26px;
   line-height: 26px;
   border-bottom: 1px dotted rgba(0,0,0,0.5);
@@ -146,8 +195,54 @@ button.buttons {
 }
 
 .table_titles > div {
-  display: table-cell;
-  width: 20%;
-  font-size: 20px;
-  padding: 10px;
+	display: table-cell;
+	box-sizing: border-box;
+	width: 15%;
+	font-size: 12px;
+	padding: 10px;
+	box-sizing: border-box;
+	font-weight: bold;
+}
+
+.MuiButtonBase-root .MuiIconButton-edgeEnd {
+  margin-right: 12px
+}
+
+
+.menu-app .MuiAccordionSummary-root.Mui-expanded {
+  min-height: 40px;
+  padding: 0px 16px;
+}
+
+
+
+.menu-app .MuiAccordionSummary-content.Mui-expanded {
+
+    margin: 12px 0;
+
+}
+
+.menu-app .MuiAccordionDetails-root {
+  display: block;
+}
+
+.menu-app .MuiAccordionDetails-root > div {
+  width: 100%;
+  display: block;
+
+}
+
+
+.table_words > div.table_titles > .wordBigger,
+.table_words > .results_table_words div > .wordBigger {
+  width: 55%;
+}
+
+
+.favourite > label {
+  cursor: pointer;
+  display: inline-block;
+  padding: 8px;
+  line-height: 16px;
+  vertical-align: middle;
 }

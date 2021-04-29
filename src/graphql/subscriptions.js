@@ -37,3 +37,57 @@ export const onDeleteNote = /* GraphQL */ `
     }
   }
 `;
+export const onCreateResult = /* GraphQL */ `
+  subscription OnCreateResult {
+    onCreateResult {
+      id
+      username
+      lists {
+        name
+        data {
+          word
+          belongto
+          checked
+        }
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateResult = /* GraphQL */ `
+  subscription OnUpdateResult {
+    onUpdateResult {
+      id
+      username
+      lists {
+        name
+        data {
+          word
+          belongto
+          checked
+        }
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteResult = /* GraphQL */ `
+  subscription OnDeleteResult {
+    onDeleteResult {
+      id
+      username
+      lists {
+        name
+        data {
+          word
+          belongto
+          checked
+        }
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;

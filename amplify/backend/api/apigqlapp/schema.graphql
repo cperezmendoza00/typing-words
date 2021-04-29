@@ -4,3 +4,22 @@ type Note @model {
   description: String
   image: String
 }
+
+
+type Result @model {
+  id: ID!
+  username: String!
+  lists: [Levels]!
+}
+
+
+type Levels {
+  name: String!
+  data: [Words]
+}
+
+type Words {
+  word: String!
+  belongto: String!
+  checked: Boolean!
+}
