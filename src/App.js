@@ -65,7 +65,7 @@ const options = [
   },
   {
     id:'mywords',
-    name:'My favourites'
+    name:'My words'
   }
 ]
 
@@ -365,7 +365,7 @@ function App() {
       SampleRate: "24000", 
       Text: text,
       TextType: "text", 
-      VoiceId: "Joanna"
+      VoiceId: "Kendra"
     };
 
 
