@@ -106,7 +106,7 @@ function App() {
   async function example() {
 
     let words = require('./words/wordsbylevel.json');
-    let configs = require('./words/config.json')    
+    //let configs = require('./words/config.json')    
     let i = 0;
 
     let study = [];

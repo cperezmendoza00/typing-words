@@ -3,9 +3,9 @@ import 'fontsource-roboto';
 import './App.css';
 
 import {API, Auth} from 'aws-amplify';
-import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
+import { withAuthenticator, AmplifySignOut, AmplifyAuthenticator} from '@aws-amplify/ui-react';
 import awscredentials from './aws-credentials';
-
+import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components';
 
 
 import { fade, makeStyles } from '@material-ui/core/styles';
@@ -170,16 +170,21 @@ function App() {
 
   
   useEffect(() => {
-    let user = {}
+
+    onAuthUIStateChange((nextAuthState, authData) => {
+      setAuthState(nextAuthState);
+      setUser(authData)
+    });
+
+    let user_payload = {}
     console.log('Searching for user data...')
     Auth.currentSession()
     .then(async r=>{
-      user = r.accessToken.payload
-      console.log('User:',user.username)
-      setUser(user)
+      user_payload = r.accessToken.payload
+      setUser(user_payload)
 
       console.log('Searching for user resutls...')
-      let apiData = await API.graphql({ query: getResult,variables: { id: user.sub }});
+      let apiData = await API.graphql({ query: getResult,variables: { id: user_payload.sub }});
       let items = [];
       if(apiData.data.getResult !== null) {
         items = apiData.data.getResult;
@@ -192,6 +197,8 @@ function App() {
 
     })
     .catch(e=>{
+      console.log('User is not logged')
+      handleClose();
     })
   }, []);
 
@@ -204,7 +211,9 @@ function App() {
   const [rounds,setRounds] = useState(0);
   const [current_audio, setcurrent_audio] = useState(null);
   const [results, setResults] = useState([]);
-  const [user, setUser] = useState([]);
+  const [authState, setAuthState] = React.useState();
+  const [user, setUser] = React.useState();
+
 
   const classes = useStyles();
   
@@ -269,8 +278,21 @@ function App() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}><AmplifySignOut /></MenuItem>
+      <MenuItem >
+    {
+    authState === AuthState.SignedIn && user ? (
+          <div className="App">
+              <div>Hello, {user.username}</div>
+              <AmplifySignOut />
+          </div>
+        ) : (
+          <AmplifyAuthenticator />
+      )
+    }
+</MenuItem>
+      
     </Menu>
+      
   );
 
   const mobileMenuId = 'primary-search-account-menu-mobile';
@@ -342,12 +364,19 @@ function App() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {options.map((option, index) => (
-          <ListItem button key={option.id} onClick={(e) => configOption(option)} >
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={option.name} />
-          </ListItem>
-        ))}
+        {options.map((option, index) => {
+          if( option.id !== 'mywords' || (user !== undefined && option.id === 'mywords') ) {
+            return (
+            <ListItem button key={option.id} onClick={(e) => configOption(option)} >
+              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+              <ListItemText primary={option.name} />
+            </ListItem>
+            )
+
+          }
+          
+        })
+        }
       </List>
     </div>
   );
@@ -375,6 +404,7 @@ function App() {
   }
 
   function next(){
+
     //console.log('next:',index,'word counter:',word_counter)
     //AQUI ESTABA OK
     if(index < 0){
@@ -391,10 +421,12 @@ function App() {
         }
 
         //AQUI YA SE LE AGREGÓ EL INDEX
-        
-
-        const new_last_words = {...study[index],index : word_counter,round:rounds}
-
+        const new_last_words = {
+          ...study[index],
+          index : word_counter,
+          round:rounds,
+          errors:current_word.errors !== undefined ? current_word.errors : 0
+        }
 
         last_words.unshift(new_last_words)
         setLastWords(last_words);
@@ -444,7 +476,7 @@ function App() {
   function validate(e){
     if(!readonly){
       text_colors = [];
-      if(typeof current_word.errors == "undefined" ) {
+      if(typeof current_word.errors === "undefined" ) {
         current_word.errors = 0;
       }
       let error = false;
@@ -534,7 +566,7 @@ function App() {
 
     //study.unshift({word:'able',belongto:'a1'})
     //study.unshift({word:'able',belongto:'a1'})
-    //study = shuffle(study)
+    study = shuffle(study)
   }
 
   function configOption(selected){
@@ -569,7 +601,7 @@ function App() {
   }
 
   async function checkboxpreesed(index_last_word){
-
+    
     handleToggle();
     
     let new_last_words = [ ...last_words ];
@@ -581,11 +613,10 @@ function App() {
     //Modify item in array set state: Destructuring
     //#changestate #arraystate      
     setLastWords(new_last_words);
-    console.log(results)
     if (results.length === 0) {
       //create an element
       let data = {
-        id: user.sub,
+        id: user.attributes.sub,
         username:user.username,
         lists:[{
           name:last_words[index_last_word].belongto,
@@ -624,7 +655,7 @@ function App() {
             return levels;
           });
           let data = {
-            id: user.sub,
+            id: user.attributes.sub,
             username:user.username,
             lists:results.lists
           }
@@ -650,11 +681,10 @@ function App() {
           });
           
           let data = {
-            id: user.sub,
+            id: user.attributes.sub,
             username:user.username,
             lists:results.lists
           }
-          console.log(data)
           await API.graphql({ query: updateResultMutation, variables: {input: data} })
           .then(r=>{
             setResults(data)
@@ -742,13 +772,19 @@ function App() {
         </Toolbar>
       </AppBar>
       {renderMobileMenu}
-      {renderMenu}
+      { 
+        renderMenu
+      }
 
       { !showOxfordConfig && !showOxfordPlay &&
-          options.map(option=>(
-            <button key={option.id} className="buttons" onClick={(e) => configOption(option)}>{option.name}</button>
-          ))
-        
+          options.map(option=> {
+            if( option.id !== 'mywords' || (user !== undefined && option.id === 'mywords') ) {
+              return (
+                <button key={option.id} className="buttons" onClick={(e) => configOption(option)}>{option.name}</button>
+              )
+          }
+        })
+         
       }
       { showOxfordConfig &&
       <div className="sliders">
@@ -847,7 +883,11 @@ function App() {
             <div>Round</div>
             <div>Errors</div>
             <div className="wordBigger">Word <label className="belong">(Level)</label></div>
-            <div>Favourite</div>
+            {
+              user !== undefined &&
+              <div>Favourite</div>
+            }
+            
           </div>
         <div className="results_table_words">
         {
@@ -856,6 +896,9 @@ function App() {
               <div>{last_word.round} - {last_word.index}</div>
               <div>{last_word.errors}</div>
               <div className="wordBigger">{last_word.word} <label className="belong">({last_word.belongto})</label></div>
+              
+              {
+              user !== undefined &&
               <div className="favourite">
                 <label>
                   { !last_word.checked &&
@@ -867,6 +910,8 @@ function App() {
                   }
                 </label>
               </div>
+              }
+              
             </div>
           ))
         }
@@ -879,7 +924,7 @@ function App() {
   );
 }
 
+export default App;
 
-
-export default withAuthenticator(App);
+//export default withAuthenticator(App);
 
