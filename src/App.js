@@ -476,7 +476,6 @@ function App() {
       setCurrentWord(current_study);
       if(typeof current_study.phonetic!== "undefined"){
         setTitle(current_study.phonetic)
-        console.log(title)
       }
       
       getaudio(current_study.word)
@@ -547,7 +546,7 @@ function App() {
     study = [];
     index = -1
     setRounds(rounds+1)
-
+    setTitle(undefined)
     if(option_selected==="mywords"){
       if(typeof results.lists !== "undefined") {
         //copy of the array
@@ -885,7 +884,7 @@ function App() {
     <div className="divTitle_text">
       { current_audio !== null &&
 
-        <label className="title_text"><Typography >What did you hear? <b>{title}</b></Typography> </label>
+        <label className="title_text"><Typography >What did you hear? <label>{title}</label></Typography> </label>
       }
     </div>
     <div className="text_container">
