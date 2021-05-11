@@ -64,6 +64,18 @@ const options = [
     name:'Oxford 5000'
   },
   {
+    id:'ofxfordphrases',
+    name:'Oxford 750 phrases'
+  },
+  {
+    id:'engvid240spelling',
+    name:'Engvid 240 Common Spelling Mistakes'
+  },
+  {
+    id:'lemongrad200pronunciation',
+    name:'Lemongrad 200 + Commonly Mispronounced Words'
+  },
+  {
     id:'mywords',
     name:'My words'
   }
@@ -213,7 +225,7 @@ function App() {
   const [results, setResults] = useState([]);
   const [authState, setAuthState] = React.useState();
   const [user, setUser] = React.useState();
-
+  const [title, setTitle] = React.useState();
 
   const classes = useStyles();
   
@@ -421,6 +433,7 @@ function App() {
         }
 
         //AQUI YA SE LE AGREGÓ EL INDEX
+        
         const new_last_words = {
           ...study[index],
           index : word_counter,
@@ -458,9 +471,15 @@ function App() {
     index++;
     text_colors = []
     if(typeof study[index] !=="undefined"){
-      const xxx = {...study[index]}
-      setCurrentWord(xxx);
-      getaudio(xxx.word)
+      
+      const current_study = {...study[index]}
+      setCurrentWord(current_study);
+      if(typeof current_study.phonetic!== "undefined"){
+        setTitle(current_study.phonetic)
+        console.log(title)
+      }
+      
+      getaudio(current_study.word)
       .then(url=>{
         if(url) {
           let audio = new Audio(url);
@@ -546,6 +565,36 @@ function App() {
         return level
       })
       
+    } else if(option_selected==="ofxfordphrases") {
+      words = require('./words/phrasesbylevel.json');
+      for (let level in words) {
+        let i = 0;
+        let study_by_level = [];
+        words[level].list.map(word=>{
+          study.push({word:word,belongto:level})
+          
+          i++;
+          return word
+        })
+      }
+
+    } else if(option_selected==="engvid240spelling") {
+      words = require('./words/misspelled.json');
+      words.map(word=>{
+        study.push({word:word,belongto:'engvid'})    
+          
+        return word
+      })
+
+
+    } else if(option_selected==="lemongrad200pronunciation") {
+      words = require('./words/misspronunced.json');
+      words.map(word=>{
+        study.push({word:word.word,belongto:'lemongrad',phonetic:word.phonetic})    
+          
+        return word
+      })
+
     } else {
       words = require('./words/wordsbylevel.json');
       let i = 0;
@@ -836,7 +885,7 @@ function App() {
     <div className="divTitle_text">
       { current_audio !== null &&
 
-        <label className="title_text"><Typography >What did you hear?</Typography></label>
+        <label className="title_text"><Typography >What did you hear? <b>{title}</b></Typography> </label>
       }
     </div>
     <div className="text_container">
@@ -846,7 +895,7 @@ function App() {
           onChange={validate}
           onKeyPress={(e) => enterpressed(e)} 
           value={formData.text}
-          
+         
         />
       }
       { current_audio !== null &&
