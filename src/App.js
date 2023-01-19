@@ -784,7 +784,7 @@ function App() {
             <MenuIcon />
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
-            Write what you hear
+            Type what you hear
             {
               showOxfordPlay &&
               current_audio !== null &&

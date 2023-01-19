@@ -1,9 +1,9 @@
 
 
 const awscredentials = {
-    region: process.env.MY_AWS_REGION,
-    accessKeyId: process.env.MY_ACCESS_KEY_ID,
-    secretAccessKey: process.env.SECRET_ACCESS_KEY
+    region: process.env.REACT_APP_MY_AWS_REGION,
+    accessKeyId: process.env.REACT_APP_MY_ACCESS_KEY_ID,
+    secretAccessKey: process.env.REACT_APP_SECRET_ACCESS_KEY
 };
 
 
