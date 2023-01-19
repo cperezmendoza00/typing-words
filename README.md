@@ -8,6 +8,17 @@ React app that plays random words or phrases from English common lists to practi
 
 When the list is selected and the activity starts, you'll listen to a word/phrase in English and you have to type it, if you type an incorrect letter you are notified with an sound and the color of the incorrect letter will be red. As soon as the word or phrase is typed correctly, you'll listen to the next word/phrase.
 
+## Configurations:
+
+Add environment variables into .zshrc file (using your own aws credentials)
+```
+export REACT_APP_MY_AWS_REGION="YOUR_REGION"
+export REACT_APP_MY_ACCESS_KEY_ID="YOUR_ACCESS_KEY"
+export REACT_APP_SECRET_ACCESS_KEY="YOUR_SECRET_ACCESS_KEY"
+```
+
+
+
 ## Details:
 - React, Amplify [Following aws example](https://aws.amazon.com/getting-started/hands-on/build-react-app-amplify-graphql/)
 - Amazon Polly (Synthesize natural-sounding human speech)
