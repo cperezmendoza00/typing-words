@@ -1,9 +1,9 @@
 
 
 const awscredentials = {
-    region: "us-east-1",
-    accessKeyId: "AKIA223ERJJEBIIE43WH",
-    secretAccessKey: "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"
+    region: process.env.MY_AWS_REGION,
+    accessKeyId: process.env.MY_ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY
 };
 
 
