@@ -10,7 +10,7 @@ When the list is selected and the activity starts, you'll listen to a word/phras
 
 ## Configurations:
 
-Add environment variables into .zshrc file (using your own aws credentials)
+Add environment variables into .zshrc file before starting the app (using your own aws credentials)
 ```
 export REACT_APP_MY_AWS_REGION="YOUR_REGION"
 export REACT_APP_MY_ACCESS_KEY_ID="YOUR_ACCESS_KEY"
